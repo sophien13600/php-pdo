@@ -43,6 +43,25 @@ function find_all()
     }
     return [];
 }
+function find_by_id($id)
+{
+    $mysql_username = "root";
+    $mysql_password = "";
+    $mysql_db = "php_pdo";
+
+    try {
+        $dsn = "mysql:host=localhost;port=3306;dbname=$mysql_db;charset=utf8";
+        $pdo = new PDO($dsn, $mysql_username, $mysql_password);
+        $select = "SELECT * FROM utilisateurs WHERE id = :id";
+        $query = $pdo->prepare($select);
+        $query->bindValue(":id", $id);
+        $query->execute();
+        return $query->fetch();
+    } catch (PDOException $ex) {
+        echo "\nErreur : problème de connexion avec la BD" . $ex->getMessage();
+    }
+    return [];
+}
 function save($name, $pwd, $nom)
 {
     $mysql_username = "root";
@@ -62,7 +81,7 @@ function save($name, $pwd, $nom)
         echo "\nErreur : problème de connexion avec la BD" . $ex->getMessage();
     }
 }
-function delete($id)
+function remove($id)
 {
     $mysql_username = "root";
     $mysql_password = "";
@@ -79,7 +98,8 @@ function delete($id)
         echo "\nErreur : problème de connexion avec la BD" . $ex->getMessage();
     }
 }
-function affiche(){
+function update($name, $pwd, $nom, $id)
+{
     $mysql_username = "root";
     $mysql_password = "";
     $mysql_db = "php_pdo";
@@ -87,12 +107,17 @@ function affiche(){
     try {
         $dsn = "mysql:host=localhost;port=3306;dbname=$mysql_db;charset=utf8";
         $pdo = new PDO($dsn, $mysql_username, $mysql_password);
-         $select = "SELECT u.username, u.nom, u.password FROM utilisateurs u";
-        $query = $pdo->query($select);
-        return $query->fetchAll();
+        $select = "UPDATE utilisateurs SET nom = :nom, username= :username, password = :pwd WHERE id = :id";
+        $query = $pdo->prepare($select);
+        $query->bindValue(":username", $name);
+        $query->bindValue(":pwd", $pwd);
+        $query->bindValue(":nom", $nom);
+        $query->bindValue(":id", $id);
         $query->execute();
     } catch (PDOException $ex) {
         echo "\nErreur : problème de connexion avec la BD" . $ex->getMessage();
+        echo $ex->getMessage();
+        echo "$id $name $nom $pwd";
+        die();
     }
 }
-    

@@ -1,7 +1,8 @@
 <?php
-include "./utilisateurs_service.php";
+include "../src/services/utilisateur_service.php";
 
 $utilisateurs = show_utilisateurs_in_list();
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -47,6 +48,7 @@ $utilisateurs = show_utilisateurs_in_list();
     <div>
         <?= $utilisateurs ?>
     </div>
+   
 </body>
 
 </html>
